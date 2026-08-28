@@ -1,6 +1,7 @@
 @echo off
 rem Lanzador del Dashboard de Diabetes SUSALUD
 rem Abre el navegador y luego inicia el servidor (mantener esta ventana abierta)
+cd /d "%~dp0"
 start "" http://localhost:8050
-python "C:\Users\Usuario\Desktop\CURSOS\CURSO LUNES\DASHBOARD_DASH\app.py"
+python "%~dp0app.py"
 pause

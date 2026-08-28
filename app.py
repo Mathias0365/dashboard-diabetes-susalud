@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
+import os
 import pandas as pd
 import plotly.express as px
 from dash import Dash, dcc, html, Input, Output
 
-CSV = r"C:\Users\Usuario\Desktop\CURSOS\PROYECTO DIABETES\DATA_DBTES\reporte_final_diabetes.xlsx"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CSV = os.path.join(BASE_DIR, "data", "reporte_diabetes_muestra.xlsx")
 
 df = pd.read_excel(CSV)
 df["FECHA_PRESTACION"] = pd.to_datetime(df["FECHA_PRESTACION"], errors="coerce")

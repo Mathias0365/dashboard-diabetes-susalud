@@ -5,12 +5,17 @@ import plotly.express as px
 import plotly.io as pio
 from PIL import Image, ImageDraw, ImageFont
 
-CSV = r"C:\Users\Usuario\Desktop\CURSOS\CURSO LUNES\DASHBOARD_POWER_BI\datos_diabetes_dashboard.csv"
+CSV = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "reporte_diabetes_muestra.xlsx")
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "img")
 os.makedirs(OUT, exist_ok=True)
 
-df = pd.read_csv(CSV)
-df["FECHA_PRESTACION"] = pd.to_datetime(df["FECHA_PRESTACION"])
+df = pd.read_excel(CSV)
+df["FECHA_PRESTACION"] = pd.to_datetime(df["FECHA_PRESTACION"], errors="coerce")
+df["PERIODO"] = df["AÑO_PRESTACION"].astype(str) + "-" + df["MES_PRESTACION"].astype(str).str.zfill(2)
+df["SEXO_LABEL"] = df["SEXO_PACIENTE"].map({1: "Masculino", 2: "Femenino"}).fillna("No especificado")
+df["GRUPO_ETARIO"] = pd.cut(df["EDAD_PACIENTE"], bins=[0, 18, 35, 50, 65, 120], labels=["<18", "18-35", "36-50", "51-65", ">65"])
+df["DEPARTAMENTO"] = df["UBIGEO_IPRESS"].astype(str).str[:2]
+df["REQUIERE_LABORATORIO"] = (df["GASTO_EXAMENES_LABORATORIO"] > 0).astype(int)
 df = df.sort_values("PERIODO")
 
 COLORES = {
